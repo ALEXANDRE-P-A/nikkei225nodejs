@@ -1,0 +1,16 @@
+import cron from 'node-cron';
+
+cron.schedule('* * * * * *', () => {
+  console.log('running a task every second');
+});
+
+cron.schedule('* * * * *', () => {
+  console.log('running a task every minute');
+});
+
+second (optional)	0-59	The second of the minute
+minute	0-59	The minute of the hour
+hour	0-23	The hour of the day
+day of month	1-31	The day of the month
+month	1-12 (or names)	The month of the year
+day of week	0-7 (or names, 0 or 7 are Sunday)	The day of the week

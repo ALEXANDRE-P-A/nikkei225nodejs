@@ -1,0 +1,20 @@
+{
+  "name": "nikkei225app",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.mjs"
+  },
+  "author": "Alexandre PA",
+  "license": "MIT",
+  "description": "",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "ip": "^2.0.1",
+    "mongodb": "^7.1.0",
+    "node-cron": "^4.2.1",
+    "yahoo-finance2": "^3.13.2"
+  }
+}

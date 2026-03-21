@@ -1,0 +1,65 @@
+url：https://cloud.mongodb.com/v2/64dc95f451f876226cddec2d#/clusters/detail/Cluster0  　  
+
+・Use this connection string in your application
+mongodb+srv://alexandrepereiraassano_db_user:4xuUESAC0Hj4whnh@nikkei225nodejs.y9h2sp6.mongodb.net/
+
+・username:alexandrepereiraassano_db_user
+・password:4xuUESAC0Hj4whnh
+
+・ping
+const run = async _ => {
+  try {
+    await client.connect();
+    await client.db("admin").command({ ping: 1 });
+    console.log("Pinged your deployment. You successfully connected to MongoDB!");
+  } finally {
+    await client.close();
+  }
+}
+
+・insert one
+const insertOne = async _ => {
+  const col = await getCollection();
+  const result = await col.insertOne({ title: "nikkei225" });
+  console.log(result);
+  await client.close();
+};
+
+・inser many
+const insertMany = async _ => {
+  const col = await getCollection();
+  const result = await col.insertMany([
+    { doc1: "doc4", int: 1, bool: true, dt: new Date(), arry: [ 0, 1, 2 ], obj: { obs: "test1" } },
+    { doc2: "doc5", int: 2, bool: false, dt: new Date(), arry: [ 3, 4, 5 ], obj: { obs: "test2" } },
+    { doc3: "doc6", int: 3, bool: true, dt: new Date(), arry: [ 6, 7, 8 ], obj: { obs: "test3" } }
+  ]);
+  console.log(result);
+  await client.close();
+};
+
+・update one
+const update = async _ => {
+  const col = await getCollection();
+  const result = await col.updateOne({ status: "inactive" }, { $set: { title: "updated" } });
+  console.log(result);
+  await client.close();
+};
+
+・update many
+const update = async _ => {
+  const col = await getCollection();
+  const result = await col.updateMany({ status: "active" }, { $set: { title: "updated" } });
+  console.log(result);
+  await client.close();
+};
+
+・delete one
+const deleteOne = async _ => {
+  const col = await getCollection();
+  const result = await col.deleteOne({ title: "nikkei225" });
+  console.log(result);
+  await client.close();
+};
+
+// 'myCollection' の全データを削除
+db.myCollection.deleteMany({})
