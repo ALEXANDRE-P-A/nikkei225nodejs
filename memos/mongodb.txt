@@ -1,4 +1,9 @@
-url：https://cloud.mongodb.com/v2/64dc95f451f876226cddec2d#/clusters/detail/Cluster0  　  
+url：https://cloud.mongodb.com/v2/64dc95f451f876226cddec2d#/clusters/detail/Cluster0  　
+
+# AWSのセキュリティルールのインバウンドルールにCustomTCPポート27017を許可
+
+# mongodbのIP Access ListにAWSインスタンスのIPアドレスを追加
+https://cloud.mongodb.com/v2/69baa6982714302866467f85#/security/network/accessList
 
 ・Use this connection string in your application
 mongodb+srv://alexandrepereiraassano_db_user:4xuUESAC0Hj4whnh@nikkei225nodejs.y9h2sp6.mongodb.net/

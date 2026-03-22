@@ -1,0 +1,11 @@
+1.mongodbのmarketTimeを取得...(1) ✓
+
+2.yahooFinanceのmarketTimeを取得してunixTimeStampに変換...(2) ✓
+
+3.(1)が空であれば、(2)をmongodbのmarketTimeに格納...(end) ✓
+
+4.(1)が空でなければ、(2)を(1)と比較...(3) ✓
+
+5.(3)が同じであれば、何もしない...(end) ✓
+
+6.(3)が同じでなければ、(1)を更新...(end) ✓

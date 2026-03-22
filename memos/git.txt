@@ -1,0 +1,7 @@
+・AWS CloudShellにコピー
+git clone https://github.com/ALEXANDRE-P-A/nikkei225nodejs.git
+
+・フォルダ内のすべてを上位フォルダに移動（AWS CloudShell）
+sudo mv ./* ../
+
+・gitignoreファイルに.envと./memosを追加

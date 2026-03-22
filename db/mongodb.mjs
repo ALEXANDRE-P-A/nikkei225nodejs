@@ -35,18 +35,26 @@ const getCollection = async (dbname, colname) => {
   }
 };
 
-const find = async (dbname, colname) => {
-  const col = await getCollection(dbname, colname);
-  const allDocs = await col.find({}).toArray();
-  console.log('All Documents:', allDocs);
-  await client.close();
+const findOne = async (dbname, colname, name) => {
+  try {
+    const col = await getCollection(dbname, colname);
+    const doc = col.findOne({ name: name });
+    return doc;
+  } catch(e) {
+    console.log(`error in find ${name}`, e);
+    await client.close();
+  };
 };
 
-const insertOne = async (dbname, colname, time) => {
-  const col = await getCollection(dbname, colname);
-  const result = await col.insertOne({ date: time });
-  console.log(result);
-  await client.close();
+const insertOne = async (dbname, colname, doc) => {
+  try {
+    const col = await getCollection(dbname, colname);
+    const result = await col.insertOne(doc);
+    return result;
+  } catch(e) {
+    console.log(`error in insert ${doc}`, e);
+    await client.close();
+  };
 };
 
 const insertMany = async (dbname, colname) => {
@@ -60,11 +68,15 @@ const insertMany = async (dbname, colname) => {
   await client.close();
 };
 
-const update = async (dbname, colname) => {
-  const col = await getCollection(dbname, colname);
-  const result = await col.updateMany({ status: "active" }, { $set: { title: "updated" } });
-  console.log(result);
-  await client.close();
+const updateOne = async (dbname, colname, name, value) => {
+  try{
+    const col = await getCollection(dbname, colname);
+    const doc = await col.updateOne({ name: name }, { $set: { value: value } });
+    return doc;
+  } catch(e) {
+    console.log(`error in update ${name}`, e);
+    await client.close();
+  };
 };
 
 const reset = async (dbname, colname) => {
@@ -74,4 +86,4 @@ const reset = async (dbname, colname) => {
   await client.close();
 };
 
-export { run, getCollection, find, insertOne, insertMany, update, reset };
+export { run, getCollection, findOne, insertOne, insertMany, updateOne, reset };
