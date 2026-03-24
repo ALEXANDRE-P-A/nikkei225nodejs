@@ -57,15 +57,15 @@ const insertOne = async (dbname, colname, doc) => {
   };
 };
 
-const insertMany = async (dbname, colname) => {
-  const col = await getCollection(dbname, colname);
-  const result = await col.insertMany([
-    { status: "active", title: "record1" },
-    { status: "inactive", title: "record2" },
-    { status: "active", title: "record3" }
-  ]);
-  console.log(result);
-  await client.close();
+const insertMany = async (dbname, colname, array) => {
+  try {
+    const col = await getCollection(dbname, colname);
+    const result = await col.insertMany(array);
+    return result;
+  } catch(e) {
+    console.log(`error in insert stocks info`, e);
+  };
+  
 };
 
 const updateOne = async (dbname, colname, name, value) => {
@@ -82,8 +82,7 @@ const updateOne = async (dbname, colname, name, value) => {
 const reset = async (dbname, colname) => {
   const col = await getCollection(dbname, colname);
   const result = await col.deleteMany({});
-  console.log(result);
-  await client.close();
+  return result;
 };
 
 export { run, getCollection, findOne, insertOne, insertMany, updateOne, reset };

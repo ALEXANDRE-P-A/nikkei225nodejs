@@ -1,0 +1,17 @@
+・日時データの取得
+const result = await client.get('/v2/equities/bars/daily', {
+  params: {
+    code: "7203",
+    // date: "20251230",
+    from: "20250930",
+    to: "20251230",
+  },
+});
+
+・上場銘柄一覧(/equities/master)
+const result = await client.get('/v2/equities/master', {
+  params: {
+    code: '7267',
+    date: '20251230',
+  },
+})
