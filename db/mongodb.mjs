@@ -8,7 +8,7 @@ const uri = process.env.MONGO_URI;
 const client = new MongoClient(uri, {
   serverApi: {
     version: ServerApiVersion.v1,
-    strict: true,
+    strict: false,
     deprecationErrors: true,
   }
 });
@@ -30,29 +30,57 @@ const getCollection = async (dbname, colname) => {
     const result = db.collection(colname);
     return result;
   } catch(e) {
-    console.log("error when get collection", e);
+    console.log("ERROR when get collection", e);
     await client.close();
   }
 };
 
-const findOne = async (dbname, colname, name) => {
+const createCollection = async (dbname, newColName) => {
+   try {
+    await client.connect();
+    const db = client.db(dbname);
+    const result = db.createCollection(newColName, {
+      capped: true,
+      size: 1024 * 50, // 必須：バイト単位のサイズ（例: 50KB）
+      max: 50         // 最大ドキュメント数
+    });
+    console.log(result);
+  } catch(e) {
+    console.log(`ERROR when create new collection ${newColName}`, e);
+    await client.close();
+  }
+};
+
+const findOne = async (dbname, colname, docname) => {
   try {
     const col = await getCollection(dbname, colname);
-    const doc = col.findOne({ name: name });
+    const doc = col.findOne({ name: docname });
     return doc;
   } catch(e) {
-    console.log(`error in find ${name}`, e);
+    console.log(`error in find document ${docname}`, e);
     await client.close();
   };
 };
 
-const insertOne = async (dbname, colname, doc) => {
+const find = async (dbname, colname) => {
   try {
     const col = await getCollection(dbname, colname);
-    const result = await col.insertOne(doc);
+    let doc = col.find();
+    const result = doc.toArray();
     return result;
   } catch(e) {
-    console.log(`error in insert ${doc}`, e);
+    console.log(`error in find collection ${colname}`, e);
+    await client.close();
+  };
+};
+
+const insertOne = async (dbname, colname, docname) => {
+  try {
+    const col = await getCollection(dbname, colname);
+    const result = await col.insertOne(docname);
+    return result;
+  } catch(e) {
+    console.log(`error in insert document ${docname}`, e);
     await client.close();
   };
 };
@@ -79,10 +107,10 @@ const updateOne = async (dbname, colname, name, value) => {
   };
 };
 
-const reset = async (dbname, colname) => {
+const resetCollection = async (dbname, colname) => {
   const col = await getCollection(dbname, colname);
   const result = await col.deleteMany({});
   return result;
 };
 
-export { run, getCollection, findOne, insertOne, insertMany, updateOne, reset };
+export { run, getCollection, createCollection, findOne, find, insertOne, insertMany, updateOne, resetCollection };

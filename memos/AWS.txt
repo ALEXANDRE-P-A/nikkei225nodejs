@@ -6,4 +6,4 @@ rmdir フォルダ名
 
 ・cloudshellの指定したインスタンスにファイルをアップロード
 # SSHキーペアファイルを事前にCloudShellにアップロードしておく
-scp -i apa-station-key.pem ./.env ec2-user@13.115.152.91:/home/cloudshell-user
+scp -i apa-station-key.pem ./.env ec2-user@13.115.152.91:/home/ec2-user
