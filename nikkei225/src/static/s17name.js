@@ -1,0 +1,20 @@
+export const s17array = [
+  [ 1, "食品", "food" ],
+  [ 2, "エネルギー資源", "energy resources" ],
+  [ 3, "建設・資材", "construction and materials" ],
+  [ 4, "素材・化学", "materials/chemistry" ],
+  [ 5, "医薬品", "pharmaceuticals" ],
+  [ 6, "自動車・輸送機", "automobiles and transportation equipment" ],
+  [ 7, "鉄鋼・非鉄", "iron and steel and non-ferrous metals" ],
+  [ 8, "機械", "machine" ],
+  [ 9, "電機・精密", "electrical and Precision Machinery" ],
+  [ 10, "情報通信・サービスその他", "information and communication services and other" ],
+  [ 11, "電気・ガス", "electricity/gas" ],
+  [ 12, "運輸・物流", "transportation/Logistics" ],
+  [ 13, "商社・卸売", "trading companies and wholesalers" ],
+  [ 14, "小売", "retail" ],
+  [ 15, "銀行", "bank" ],
+  [ 16, "金融（除く銀行）", "finance (excluding banks)" ],
+  [ 17, "不動産", "real estate" ],
+  [ 99, "その他", "others" ]
+];

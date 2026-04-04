@@ -1,0 +1,16 @@
+@import url("variable.css");
+
+.stocks {
+  width: 70%;
+  height: 100%;
+  height: calc(100% - var(--header-height));
+}
+
+@media screen and (max-width: 767px){
+  .stocks {
+    width: 100%;
+    height: 100%;
+    padding-top: var(--header-height);
+    z-index: 1;
+  }
+}

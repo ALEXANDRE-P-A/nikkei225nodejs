@@ -44,25 +44,24 @@ const createCollection = async (dbname, newColName) => {
       size: 1024 * 50, // 必須：バイト単位のサイズ（例: 50KB）
       max: 50         // 最大ドキュメント数
     });
-    console.log(result);
   } catch(e) {
     console.log(`ERROR when create new collection ${newColName}`, e);
     await client.close();
   }
 };
 
-const findOne = async (dbname, colname, docname) => {
+const findOneMongoDB = async (dbname, colname, docname) => {
   try {
     const col = await getCollection(dbname, colname);
-    const doc = col.findOne({ name: docname });
-    return doc;
+    const doc = await col.findOne({ name: docname });
+    return doc.value;
   } catch(e) {
     console.log(`error in find document ${docname}`, e);
     await client.close();
   };
 };
 
-const find = async (dbname, colname) => {
+const findManyMongoDB = async (dbname, colname) => {
   try {
     const col = await getCollection(dbname, colname);
     let doc = col.find();
@@ -96,11 +95,17 @@ const insertMany = async (dbname, colname, array) => {
   
 };
 
-const updateOne = async (dbname, colname, name, value) => {
+const updateOneMongoDB = async (dbname, colname, name, value) => {
   try{
     const col = await getCollection(dbname, colname);
     const doc = await col.updateOne({ name: name }, { $set: { value: value } });
-    return doc;
+
+    if(doc.acknowledged){
+      if(Array.isArray(value))
+        console.log(`SUCCESSFULLY UPDATE ${value.length} item to ${name}`);
+      else
+        console.log(`SUCCESSFULLY UPDATE ${value} item to ${name}`);
+    }
   } catch(e) {
     console.log(`error in update ${name}`, e);
     await client.close();
@@ -108,9 +113,35 @@ const updateOne = async (dbname, colname, name, value) => {
 };
 
 const resetCollection = async (dbname, colname) => {
-  const col = await getCollection(dbname, colname);
-  const result = await col.deleteMany({});
-  return result;
+  // 1. セッションを開始
+  const session = client.startSession();
+
+  try {
+    // 2. トランザクションを開始
+    session.startTransaction();
+
+    // 3. トランザクション内でdeleteManyを実行 (sessionを指定)
+    const col = await getCollection(dbname, colname);
+    const result = await col.deleteMany(
+      {}, // 削除条件
+      { session } // 重要: セッションを指定
+    );
+    console.log(`${result.deletedCount} documents deleted.`);
+
+    // 4. トランザクションをコミット
+    await session.commitTransaction();
+    console.log('Transaction committed.');
+
+    return result;
+  } catch(error) {
+    // エラー発生時はトランザクションをアボート (ロールバック)
+    await session.abortTransaction();
+    console.error('Transaction aborted due to error:', error);
+  } finally {
+    // セッションを閉じる
+    await session.endSession();
+    await client.close();
+  };
 };
 
-export { run, getCollection, createCollection, findOne, find, insertOne, insertMany, updateOne, resetCollection };
+export { createCollection, findOneMongoDB, findManyMongoDB, insertOne, updateOneMongoDB };

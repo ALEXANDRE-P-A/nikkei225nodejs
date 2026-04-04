@@ -1,10 +1,11 @@
 import ip from "ip";
 import express from "express";
+import path from "path";
 import cors from "cors";
 import cron from "node-cron";
 
 import { insertOne } from "./db/mongodb.mjs";
-import { getLoadingFlag, getTradingDay, getSectors, getStocks } from "./finance/j-quants.mjs";
+import { getLoadingFlag, getTradingDay, getS17, getS33, getStocks } from "./finance/j-quants.mjs";
 
 import "./finance/j-quants.mjs";
 
@@ -41,16 +42,21 @@ app.get("/lastTradingDay", async (req, res) => {
     res.json({ "tradingDay": getTradingDay() })
 });
 
-app.get("/sectors", async (req, res) => {
-  console.log(req.ip);
+app.get("/S17", async (req, res) => {
   if(getLoadingFlag())
     res.json({ "status": "loading" });
   else
-    res.json(getSectors());
+    res.json(getS17());
+});
+
+app.get("/S33", async (req, res) => {
+  if(getLoadingFlag())
+    res.json({ "status": "loading" });
+  else
+    res.json(getS33());
 });
 
 app.get("/stocks", async (req, res) => {
-  console.log(req.ip);
   if(getLoadingFlag())
     res.json({ "status": "loading" });
   else

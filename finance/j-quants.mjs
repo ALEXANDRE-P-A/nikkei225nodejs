@@ -1,6 +1,6 @@
 import axios from "axios";
 import { config } from "dotenv";
-import { findOne, find, updateOne, insertMany, resetCollection } from "../db/mongodb.mjs";
+import { findOneMongoDB, findManyMongoDB, updateOneMongoDB } from "../db/mongodb.mjs";
 import { setTimeout } from 'timers/promises';
 
 config();
@@ -9,7 +9,8 @@ const apiKey = process.env.J_QUANTS_API_KEY;
 let loadingFlag = false;
 let tradingDay = "";
 let stocksArray = [];
-let sectorsArray = [];
+let S17Array = [];
+let S33Array = [];
 
 const client = axios.create({
   baseURL: "https://api.jquants.com",
@@ -20,9 +21,11 @@ const getLoadingFlag = _ => loadingFlag;
 
 const getTradingDay = _ => tradingDay;
 
-const getStocks = _ => stocksArray;
+const getS17 = _ => S17Array;
 
-const getSectors = _ => sectorsArray;
+const getS33 = _ => S33Array;
+
+const getStocks = _ => stocksArray;
 
 const today = _ => {
   const d = new Date();
@@ -39,36 +42,6 @@ const dateBehind = day => {
     ('0' + (d.getMonth() + 1)).slice(-2) +
     ('0' + d.getDate()).slice(-2);
   return formatted;
-};
-
-const getLastTradingDayFromDB = async _ => {
-  try {
-    const traidingDayInDB = await findOne("nikkei225", "lastTradingDay", "last trading day");
-    return traidingDayInDB.value;
-  } catch(e) {
-    console.log("ERROR when check last tranding day");
-    console.log(e);
-  };
-};
-
-const getSectorsFromDB = async _ => {
-  try {
-    const sectors = await findOne("nikkei225", "sectors", "sectors");
-    return sectors.value;
-  } catch(e) {
-    console.log("ERROR when get sectors from DB");
-    console.log(e);
-  }
-};
-
-const getStocksFromDB = async _ => {
-   try {
-    const stocks = await find("nikkei225", "stocks");
-    return stocks
-  } catch(e) {
-    console.log("ERROR when get stocks from DB");
-    console.log(e);
-  }
 };
 
 const switchLoadingFlag = async bool => {
@@ -92,25 +65,6 @@ const getLastTradingDayFromJQuants = async num => {
     console.log("ERROR when get last tranding day from J-quants");
     console.log(e);
   };
-};
-
-const storeLastTradingDayToDB = async string => {
-  try {
-    const result = await updateOne("nikkei225", "lastTradingDay", "lastTradingDay", string);
-    if(result.acknowledged)
-      console.log("UPDATED SUCCESSFULLY the last trading day in DB");
-    else 
-      console.log("UPDATED FAILED the last trading day in DB");
-  } catch(e) {
-    console.log("ERROR when update last trading day to DB");
-    console.log(e);
-  };
-};
-
-const getTickersFromDB = async _ => {
-  const tickers = await findOne("nikkei225", "tickers", "tickers");
-  console.log("got tickers successfully");
-  return tickers.tickers;
 };
 
 const getMasterInfo = async (ticker, day) => {
@@ -190,7 +144,7 @@ const calculateMA = async (ticker, toDay) => {
 const updateProcess = async lastTradingDay => {
   let i = 1;
   console.log(`${lastTradingDay} update start`);
-  const tickers = await getTickersFromDB();
+  const tickers = await findOneMongoDB("nikkei225", "tickers", "tickers");
   for(const ticker of tickers){
     const masterInfo = await getMasterInfo(ticker, lastTradingDay);
     const lastDailyInfo = await getLastDailyInfo(ticker, lastTradingDay);
@@ -204,7 +158,8 @@ const updateProcess = async lastTradingDay => {
       code: ticker,
       nameJp: masterInfo.CoName,
       nameEn: masterInfo.CoNameEn,
-      sector: masterInfo.S33Nm,
+      s17: Number(masterInfo.S17),
+      s33: Number(masterInfo.S33),
       open: lastDailyInfo[0].O,
       high: lastDailyInfo[0].H,
       low: lastDailyInfo[0].L,
@@ -214,56 +169,58 @@ const updateProcess = async lastTradingDay => {
       flag: calculatedMA
     }
     stocksArray.push(data);
-    sectorsArray.push(masterInfo.S33Nm);
-    console.log(`${i++} / ${tickers.length}  ${ticker} ${masterInfo.CoNameEn} ${calculatedMA}`);
+    S17Array.push(masterInfo.S17);
+    S33Array.push(masterInfo.S33);
+    console.log(`${i++} / ${tickers.length}  ${ticker} ${masterInfo.CoNameEn} ${masterInfo.S17} ${masterInfo.S33} ${calculatedMA}`);
     await setTimeout(3000);
   };
-  try {
-    const sectorsArrayDuplicationEliminated = [...new Set(sectorsArray)];
-    sectorsArray = sectorsArrayDuplicationEliminated;
-    const resetStocksResult = await resetCollection("nikkei225", "stocks");
-    if(resetStocksResult.acknowledged){
-      console.log("RESET SUCCESSFULLY collection 'stocks' in DB");
-      const insertStocksResult = await insertMany("nikkei225", "stocks", stocksArray);
-      const updateSectorsResult = await updateOne("nikkei225", "sectors", "sectors", sectorsArrayDuplicationEliminated);
-      if(insertStocksResult.acknowledged)
-        console.log(`UPDATE SUCCESSFULLY ${tickers.length} tickers in DB`);
-      if(updateSectorsResult.acknowledged)
-        console.log(`UPDATE SUCCESSFULLY ${sectorsArrayDuplicationEliminated.length} sectors in DB`);
-    }
-  } catch(e) {
-    console.log("ERROR when update stock data to DB");
-    console.log(e);
-  };
+  // sectors deduplication
+  const deduplicationS17 = [ ...new Set(S17Array) ];
+  const deduplicationS33 = [ ...new Set(S33Array) ];
+  // update sectors variable
+  S17Array = deduplicationS17;
+  S33Array = deduplicationS33
+  // update sectors to DB
+  await updateOneMongoDB("nikkei225", "sectors", "S17", deduplicationS17);
+  await updateOneMongoDB("nikkei225", "sectors", "S33", deduplicationS33);
+  // update stocks to DB
+  await updateOneMongoDB("nikkei225", "stocks", "nikkei225", stocksArray);
 };
 
 const init = async _ => {
+
   if(tradingDay = "")
-    tradingDay = await getLastTradingDayFromDB();
+    tradingDay = await findOneMongoDB("nikkei225", "lastTradingDay", "lastTradingDay");
+
+  if(S17Array.length === 0)
+    S17Array = await findOneMongoDB("nikkei225", "sectors", "S17");
+
+  if(S33Array.length === 0)
+    S33Array = await findOneMongoDB("nikkei225", "sectors", "S33");
+
   if(stocksArray.length === 0)
-    stocksArray = await getStocksFromDB();
-  if(sectorsArray.length === 0)
-    sectorsArray = await getSectorsFromDB();
+    stocksArray = await findOneMongoDB("nikkei225", "stocks", "nikkei225");
+
+  console.log("INITIALIZED");
 };
 
 const main = async _ => {
   await switchLoadingFlag(true);
-  const lastTradingDayDB = await getLastTradingDayFromDB();
+  const lastTradingDayDB = await findOneMongoDB("nikkei225", "lastTradingDay", "lastTradingDay");
   // 1 : last dat, 2 : one day before
   const lastTradingDayJQuants = await getLastTradingDayFromJQuants(1);
 
-  if(lastTradingDayDB === lastTradingDayJQuants)
+  if(lastTradingDayDB === lastTradingDayJQuants){
     console.log("last trading day in DB is already the lastest");
-  else {
-    await storeLastTradingDayToDB(lastTradingDayJQuants);
+    await init()
+  } else {
+    updateOneMongoDB("nikkei225", "lastTradingDay", "lastTradingDay", lastTradingDayJQuants);
     await updateProcess(lastTradingDayJQuants);
     tradingDay = lastTradingDayJQuants;
   }
   await switchLoadingFlag(false);
 };
 
-// init();
+main();
 
-// main();
-
-export { getLoadingFlag, getTradingDay, getSectors, getStocks }
+export { getLoadingFlag, getTradingDay, getS17, getS33, getStocks }
