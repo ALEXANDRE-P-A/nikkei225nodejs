@@ -1,4 +1,3 @@
 # .env (環境変数) を除外
 .env
 memos
-node_modules
