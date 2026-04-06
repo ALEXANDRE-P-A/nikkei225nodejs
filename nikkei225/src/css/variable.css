@@ -5,4 +5,5 @@
   --border-color: #fff;
   --elems-padding: 7.5px;
   --borders: .5px solid rgba(255, 255, 255, .5);
+  --padding-global: 7.5px;
 }

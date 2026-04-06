@@ -1,5 +1,94 @@
+@import url("variable.css");
+
 .sector {
   width: 100%;
-  height: 50px;
-  background-color: pink;
+  height: calc(40px - var(--border-width));
+  border-bottom: var(--borders);
+  display: flex;
+}
+
+.sector:hover, .sector.toggled:hover {
+  color: rgba(22, 29, 38, 1);
+  background-color: rgba(255, 255, 255, 1);
+}
+
+.sector.toggled {
+  color: lightgreen
+}
+
+.selected-flag {
+  width: 10%;
+  height: 100%;
+  border-right: var(--borders);
+}
+
+.selector-flag-icon {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: all .2s linear;
+}
+
+.selector-flag-icon.toggled {
+  opacity: 1;
+}
+
+.sector-name {
+  width: calc(80% - (var(--padding-global) * 2) - var(--border-width));
+  height: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  font-size: .8em;
+  padding: 0 var(--padding-global);
+  border-right: var(--borders);
+}
+
+.sector-number {
+  width: calc(10% - (var(--padding-global) * 2) - var(--border-width));
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: .8em;
+  border-right: var(--borders);
+  padding: 0 var(--padding-global);
+  font-size: .4em;
+}
+
+@media screen and (max-width: 767px){
+  .sector.toggled {
+    margin-left: 0;
+    border-right: var(--borders);
+  }
+
+  .sector:hover {
+    color: #fff;
+    background-color: rgba(22, 29, 38, 1);
+  }
+
+  .sector.toggled:hover {
+    color: lightgreen;
+    background-color: rgba(22, 29, 38, 1);
+  }
+
+  .sector:active, .sector.toggled:active {
+    background-color: #fff;
+  }
+
+  .selected-flag {
+    width: calc(15% - var(--border-width));
+  }
+
+  .sector-name {
+    width: calc(70% - (var(--padding-global) * 2) - var(--border-width));
+  }
+
+  .sector-number {
+    width: calc(15% - (var(--padding-global) * 2) - var(--border-width));
+    font-size: .2em;
+  }
 }

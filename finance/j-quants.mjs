@@ -44,8 +44,12 @@ const dateBehind = day => {
   return formatted;
 };
 
-const switchLoadingFlag = async bool => {
+const switchLoadingFlag = bool => {
   loadingFlag = bool;
+  if(loadingFlag)
+    console.log("loading");
+  else
+    console.log("loaded");
 };
 
 const getLastTradingDayFromJQuants = async num => {
@@ -188,8 +192,9 @@ const updateProcess = async lastTradingDay => {
 };
 
 const init = async _ => {
+  switchLoadingFlag(true);
 
-  if(tradingDay = "")
+  if(tradingDay === "")
     tradingDay = await findOneMongoDB("nikkei225", "lastTradingDay", "lastTradingDay");
 
   if(S17Array.length === 0)
@@ -201,11 +206,12 @@ const init = async _ => {
   if(stocksArray.length === 0)
     stocksArray = await findOneMongoDB("nikkei225", "stocks", "nikkei225");
 
+  switchLoadingFlag(false);
   console.log("INITIALIZED");
 };
 
 const main = async _ => {
-  await switchLoadingFlag(true);
+  switchLoadingFlag(true);
   const lastTradingDayDB = await findOneMongoDB("nikkei225", "lastTradingDay", "lastTradingDay");
   // 1 : last dat, 2 : one day before
   const lastTradingDayJQuants = await getLastTradingDayFromJQuants(1);
@@ -218,9 +224,10 @@ const main = async _ => {
     await updateProcess(lastTradingDayJQuants);
     tradingDay = lastTradingDayJQuants;
   }
-  await switchLoadingFlag(false);
+  switchLoadingFlag(false);
 };
 
-main();
+// main();
+init();
 
-export { getLoadingFlag, getTradingDay, getS17, getS33, getStocks }
+export { main, getLoadingFlag, getTradingDay, getS17, getS33, getStocks }
