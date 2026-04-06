@@ -1,9 +1,0 @@
-・現在いるフォルダ内をすべて削除
-rm -rf ./*
-
-・空フォルダの削除
-rmdir フォルダ名
-
-・cloudshellの指定したインスタンスにファイルをアップロード
-# SSHキーペアファイルを事前にCloudShellにアップロードしておく
-scp -i apa-station-key.pem ./.env ec2-user@13.115.152.91:/home/ec2-user
