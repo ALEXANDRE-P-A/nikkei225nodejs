@@ -1,4 +1,4 @@
 # .env (環境変数) を除外
 .env
-memos
-nikkei225
+/memos
+/nikkei225
