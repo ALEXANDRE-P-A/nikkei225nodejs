@@ -3,7 +3,7 @@ import { config } from "dotenv";
 
 config();
 
-const uri = process.env.MONGO_URI;
+const uri = process.env.MONGO_URI
 
 const client = new MongoClient(uri, {
   serverApi: {
@@ -30,7 +30,7 @@ const getCollection = async (dbname, colname) => {
     const result = db.collection(colname);
     return result;
   } catch(e) {
-    console.log("ERROR when get collection", e);
+    console.log("(mgdb*0) ERROR when get collection", e);
     await client.close();
   }
 };
@@ -45,7 +45,7 @@ const createCollection = async (dbname, newColName) => {
       max: 50         // 最大ドキュメント数
     });
   } catch(e) {
-    console.log(`ERROR when create new collection ${newColName}`, e);
+    console.log(`(mgdb*1) ERROR when create new collection ${newColName}`, e);
     await client.close();
   }
 };
@@ -56,7 +56,7 @@ const findOneMongoDB = async (dbname, colname, docname) => {
     const doc = await col.findOne({ name: docname });
     return doc.value;
   } catch(e) {
-    console.log(`error in find document ${docname}`, e);
+    console.log(`(mgdb*2) error in find document ${docname}`, e);
     await client.close();
   };
 };
@@ -68,7 +68,7 @@ const findManyMongoDB = async (dbname, colname) => {
     const result = doc.toArray();
     return result;
   } catch(e) {
-    console.log(`error in find collection ${colname}`, e);
+    console.log(`(mgdb*3) error in find collection ${colname}`, e);
     await client.close();
   };
 };
@@ -79,7 +79,7 @@ const insertOne = async (dbname, colname, docname) => {
     const result = await col.insertOne(docname);
     return result;
   } catch(e) {
-    console.log(`error in insert document ${docname}`, e);
+    console.log(`(mgdb*4) error in insert document ${docname}`, e);
     await client.close();
   };
 };
@@ -90,7 +90,7 @@ const insertMany = async (dbname, colname, array) => {
     const result = await col.insertMany(array);
     return result;
   } catch(e) {
-    console.log(`error in insert stocks info`, e);
+    console.log(`(mgdb*5) error in insert stocks info`, e);
   };
   
 };
@@ -107,7 +107,7 @@ const updateOneMongoDB = async (dbname, colname, name, value) => {
         console.log(`SUCCESSFULLY UPDATE ${value} item to ${name}`);
     }
   } catch(e) {
-    console.log(`error in update ${name}`, e);
+    console.log(`(mgdb*6) error in update ${name}`, e);
     await client.close();
   };
 };
@@ -136,7 +136,7 @@ const resetCollection = async (dbname, colname) => {
   } catch(error) {
     // エラー発生時はトランザクションをアボート (ロールバック)
     await session.abortTransaction();
-    console.error('Transaction aborted due to error:', error);
+    console.error('(mgdb*7) Transaction aborted due to error:', error);
   } finally {
     // セッションを閉じる
     await session.endSession();
@@ -144,4 +144,4 @@ const resetCollection = async (dbname, colname) => {
   };
 };
 
-export { createCollection, findOneMongoDB, findManyMongoDB, insertOne, updateOneMongoDB };
+export { run, createCollection, findOneMongoDB, findManyMongoDB, insertOne, updateOneMongoDB };

@@ -3,22 +3,22 @@ import loadingImg from "../images/loading.svg";
 
 import { useSector } from "../context/SectorContext.js";
 import { useAlertWin } from "../context/AlertWinContext.js";
-import { useFilterSp } from "../context/FilterSpContext.js";
 import { useLoading } from "../context/LoadingContext.js";
+import { useAboutThisApp } from "../context/AboutThisAppContext.js";
 
 const AlertWindow = _ => {
 
   const [ ,toggleSector ] = useSector();
   const [ alertWin, toggleAlertWin ] = useAlertWin();
-  const [ filterSp, toggleFilterSp ] = useFilterSp();
+  const [ about, toggleAbout ] = useAboutThisApp();
   const [ loading ] = useLoading();
 
   return (
     <div 
-      className={ alertWin || filterSp || loading? "alertWindow" : "alertWindow hidden" }
+      className={ alertWin || about || loading? "alertWindow" : "alertWindow hidden" }
       onClick={ _ => {
         toggleSector(false);
-        toggleFilterSp(false);
+        toggleAbout(false);
         toggleAlertWin(false);
       }}
     >

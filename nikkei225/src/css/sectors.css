@@ -20,7 +20,6 @@
   justify-content: center;
   align-items: center;
   border-bottom: var(--borders);
-  border-bottom-width: 1px;
   font-size: .8em;
 }
 
@@ -47,29 +46,38 @@
 
 .sector-items {
   width: 100%;
-  height: calc(100% - 25px);
+  height: calc(100% - 25px - 40px);
   overflow-y: auto;
-  scrollbar-width: none;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(174, 174, 174, .5) rgba(174, 174, 174, .05);
   background-color: rgba(22, 29, 38, .75);
   overscroll-behavior: none; 
+  padding-bottom: 40px
 }
 
 @media screen and (max-width: 767px){
   .sectors {
-    width: 80%;
+    width: calc(80% - .5px);
     height: 100%;
     position: fixed;
     top: 0;
     left: 0;
     z-index: 4;
     margin-left: -100%;
-    border-right: none;
     transition: all .2s linear;
   }
 
   .sectors.toggled {
     margin-left: 0;
     border-right: var(--borders);
+  }
+
+  .sector-type {
+    border-bottom: 0;
+  }
+
+  .sector-items {
+    border-top: var(--borders);
   }
 
   .sector-type:hover {

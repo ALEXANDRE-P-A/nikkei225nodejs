@@ -1,6 +1,6 @@
 import axios from "axios";
 import { config } from "dotenv";
-import { findOneMongoDB, findManyMongoDB, updateOneMongoDB } from "../db/mongodb.mjs";
+import { run, findOneMongoDB, findManyMongoDB, updateOneMongoDB } from "../db/mongodb.mjs";
 import { setTimeout } from 'timers/promises';
 
 config();
@@ -66,7 +66,7 @@ const getLastTradingDayFromJQuants = async num => {
     const concattedSplittedLastTradingDay = splittedLastTradingDay.join("");
     return concattedSplittedLastTradingDay;
   } catch(e) {
-    console.log("ERROR when get last tranding day from J-quants");
+    console.log("(jq*0) ERROR when get last tranding day from J-quants");
     console.log(e);
   };
 };
@@ -81,7 +81,7 @@ const getMasterInfo = async (ticker, day) => {
     });
     return result.data.data[0];
   } catch(e) {
-    console.log(`ERROR when get ${ticker} master info`);
+    console.log(`(jq*1) ERROR when get ${ticker} master info`);
     console.error(e);
   }
 };
@@ -96,7 +96,7 @@ const getLastDailyInfo = async (ticker, day) => {
     });
     return result.data.data;
   } catch(e) {
-    console.log(`ERROR when get ${ticker} today data`);
+    console.log(`(jq*2) ERROR when get ${ticker} today data`);
     console.error(e);
   }
 };
@@ -112,7 +112,7 @@ const getHistoricalDailyInfo = async (ticker, toDay) => {
     });
     return array.data.data;
   } catch(e) {
-    console.log(`ERROR when get ${ticker} daily info`);
+    console.log(`(jq*3) ERROR when get ${ticker} daily info`);
     console.error(e);
   }
 };
@@ -229,5 +229,6 @@ const main = async _ => {
 
 // main();
 init();
+// run();
 
 export { main, getLoadingFlag, getTradingDay, getS17, getS33, getStocks }

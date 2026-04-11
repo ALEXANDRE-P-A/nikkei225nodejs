@@ -1,4 +1,5 @@
 import "../css/header.css";
+import logo from "../images/logo.png";
 import { useEffect } from "react";
 
 import { MdOutlineFormatAlignLeft } from "react-icons/md";
@@ -10,7 +11,7 @@ import { useLoading } from "../context/LoadingContext.js";
 import { useSelector, useDispatch } from "react-redux";
 import { updateLastTradingDay, updateS17, updateS33, updateStocks } from "../store/modules/nikkei225.js";
 
-const localFetchURI = "192.168.11.8:3000";
+const FETCH_URL = window._env_?.FETCH_URL;
 
 const Header = _ => {
 
@@ -22,7 +23,7 @@ const Header = _ => {
   const dispatch = useDispatch();
 
   const fetchTradingDay = async _ => {
-    fetch(`http://${localFetchURI}/lastTradingDay`)
+    fetch(`${FETCH_URL}/lastTradingDay`)
     .then(response => response.json())
     .then(async json => {
       if(json && json.status === "loading"){
@@ -46,19 +47,19 @@ const Header = _ => {
   };
 
   const fetchS17 = async _ => {
-    fetch(`http://${localFetchURI}/s17`)
+    fetch(`${FETCH_URL}/s17`)
     .then(res => res.json())
     .then(json => dispatch(updateS17({ target: json.s17 })))
   };
 
    const fetchS33 = async _ => {
-    fetch(`http://${localFetchURI}/s33`)
+    fetch(`${FETCH_URL}/s33`)
     .then(res => res.json())
     .then(json => dispatch(updateS33({ target: json.s33 })))
   };
 
    const fetchStocks = async _ => {
-    fetch(`http://${localFetchURI}/stocks`)
+    fetch(`${FETCH_URL}/stocks`)
     .then(res => res.json())
     .then(json => dispatch(updateStocks({ target: json.stocks })))
   };
@@ -67,13 +68,21 @@ const Header = _ => {
     fetchTradingDay()
   }, []);
 
-  const headerTradingDay = `${lastTradingDay.substring(0,4)}/${lastTradingDay.substring(5,6).padStart(2, "0")}/${lastTradingDay.substring(7,8).padStart(2, "0")}`;
+  const tYear = lastTradingDay.substring(0, 4);
+  const tMonth = lastTradingDay.substring(4, 6);
+  const tDay = lastTradingDay.substring(6, 8);
+
+  const headerTradingDay = `${tYear}/${tMonth}/${tDay}`;
 
   return (
     <div className="header">
         <div className="header-main">
-          <span className="header-item">Nikkei 255 App for Swing Trade</span>
-          <span className="header-item">Last Trading Day : { headerTradingDay } (JST)</span>
+          <div>
+             <img src={ logo } alt="Description" className="header-logo"/>
+          </div>
+          <div>
+            <span className="header-item">Last Trading Day : { headerTradingDay } (JST)</span>
+          </div>
         </div>
 
         <div className="header-btn">
@@ -84,7 +93,7 @@ const Header = _ => {
               toggleSector(true)
             }}
           >
-            <MdOutlineFormatAlignLeft className="btn-icon" />
+            <MdOutlineFormatAlignLeft style={{ width: "30px", height: "20px" }} />
           </button>
         </div>
     </div>

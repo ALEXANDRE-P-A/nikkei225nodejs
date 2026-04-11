@@ -7,6 +7,9 @@ https://cloud.mongodb.com/v2/69baa6982714302866467f85#/security/network/accessLi
 
 ・Use this connection string in your application
 mongodb+srv://alexandrepereiraassano_db_user:4xuUESAC0Hj4whnh@nikkei225nodejs.y9h2sp6.mongodb.net/
+mongodb+srv://alexandrepereiraassano_db_user:4xuUESAC0Hj4whnh@nikkei225nodejs.y9h2sp6.mongodb.net/?appName=nikkei225nodejs
+
+mongosh "mongodb+srv://nikkei225nodejs.y9h2sp6.mongodb.net/" --apiVersion 1 --username alexandrepereiraassano_db_user
 
 ・username:alexandrepereiraassano_db_user
 ・password:4xuUESAC0Hj4whnh

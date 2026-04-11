@@ -19,7 +19,6 @@
 .selected-flag {
   width: 10%;
   height: 100%;
-  border-right: var(--borders);
 }
 
 .selector-flag-icon {
@@ -37,41 +36,28 @@
 }
 
 .sector-name {
-  width: calc(80% - (var(--padding-global) * 2) - var(--border-width));
+  width: 80%;
   height: 100%;
   display: flex;
   justify-content: flex-start;
   align-items: center;
   font-size: .8em;
   padding: 0 var(--padding-global);
-  border-right: var(--borders);
 }
 
 .sector-number {
-  width: calc(10% - (var(--padding-global) * 2) - var(--border-width));
+  width: 10%;
   height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: .8em;
-  border-right: var(--borders);
-  padding: 0 var(--padding-global);
   font-size: .4em;
 }
 
 @media screen and (max-width: 767px){
-  .sector.toggled {
-    margin-left: 0;
-    border-right: var(--borders);
-  }
-
-  .sector:hover {
-    color: #fff;
-    background-color: rgba(22, 29, 38, 1);
-  }
-
   .sector.toggled:hover {
-    color: lightgreen;
+    color: green;
     background-color: rgba(22, 29, 38, 1);
   }
 
@@ -79,16 +65,18 @@
     background-color: #fff;
   }
 
-  .selected-flag {
-    width: calc(15% - var(--border-width));
-  }
-
   .sector-name {
-    width: calc(70% - (var(--padding-global) * 2) - var(--border-width));
+    width: 75%;
+    height: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    font-size: .8em;
+    padding: 0 var(--padding-global);
   }
 
   .sector-number {
-    width: calc(15% - (var(--padding-global) * 2) - var(--border-width));
-    font-size: .2em;
+    width: 15%;
+    font-size: .1em;
   }
 }

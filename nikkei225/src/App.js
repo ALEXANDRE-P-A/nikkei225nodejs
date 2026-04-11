@@ -8,14 +8,14 @@ import { Header } from "./components/header.js";
 import { Sectors } from "./components/sectors.js";
 import { Stocks } from "./components/stocks.js";
 import { AlertWindow } from "./components/alertWindow.js";
-import { StockFilter } from "./components/stockFilter.js";
+import { AboutThisApp } from "./components/aboutThisApp.js";
 
 import { SectorProvider } from "./context/SectorContext.js";
 import { SectorTypeProvider } from "./context/SectorTypeContext.js";
 import { AlertWinProvider } from "./context/AlertWinContext.js";
 import { SectorNoProvider } from "./context/SectorNoContext.js";
-import { FilterSpProvider } from "./context/FilterSpContext.js";
 import { LoadingProvider } from "./context/LoadingContext.js";
+import { AboutThisAppProvider } from "./context/AboutThisAppContext.js";
 
 const App = _ => {
 
@@ -27,15 +27,15 @@ const App = _ => {
             <SectorTypeProvider>
               <AlertWinProvider>
                 <SectorNoProvider>
-                  <FilterSpProvider>
+                  <AboutThisAppProvider>
                     <LoadingProvider>
                       <AlertWindow />
                       <Header />
                       <Sectors />
                       <Stocks />
-                      <StockFilter />
+                      <AboutThisApp />
                     </LoadingProvider>
-                  </FilterSpProvider>
+                  </AboutThisAppProvider>
                 </SectorNoProvider>
               </AlertWinProvider>
             </SectorTypeProvider>
