@@ -1,7 +1,0 @@
-・日付をunixTimeStampに変換
-const date = new Date();
-const unixTimeStamp = Math.floor(date.getTime() / 1000);
-
-・unixTimeStamp(JST)を日付に変換
-const date = new Date(unixTimeStamp * 1000);
-const jstDate = date.toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" });
