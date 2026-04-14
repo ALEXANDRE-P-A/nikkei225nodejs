@@ -44,7 +44,7 @@ const dateBehind = day => {
   return formatted;
 };
 
-const switchLoadingFlag = bool => {
+const switchLoadingFlag = async bool => {
   loadingFlag = bool;
   if(loadingFlag)
     console.log("loading");
@@ -164,10 +164,10 @@ const updateProcess = async lastTradingDay => {
       nameEn: masterInfo.CoNameEn,
       s17: Number(masterInfo.S17),
       s33: Number(masterInfo.S33),
-      open: lastDailyInfo[0].O,
-      high: lastDailyInfo[0].H,
-      low: lastDailyInfo[0].L,
-      close: lastDailyInfo[0].C,
+      open: lastDailyInfo[0].AdjO,
+      high: lastDailyInfo[0].AdjH,
+      low: lastDailyInfo[0].AdjL,
+      close: lastDailyInfo[0].AdjC,
       volume: lastDailyInfo[0].Vo,
       value:  lastDailyInfo[0].Va,
       flag: calculatedMA
@@ -211,7 +211,7 @@ const init = async _ => {
 };
 
 const main = async _ => {
-  switchLoadingFlag(true);
+  await switchLoadingFlag(true);
   const lastTradingDayDB = await findOneMongoDB("nikkei225", "lastTradingDay", "lastTradingDay");
   // 1 : last dat, 2 : one day before
   const lastTradingDayJQuants = await getLastTradingDayFromJQuants(1);
@@ -224,7 +224,7 @@ const main = async _ => {
     await updateProcess(lastTradingDayJQuants);
     tradingDay = lastTradingDayJQuants;
   }
-  switchLoadingFlag(false);
+  await switchLoadingFlag(false);
 };
 
 // main();

@@ -20,7 +20,7 @@ app.use(express.json());
 app.use("/static", express.static(path.join(__dirname, "nikkei225reactapp", "static")));
 app.use("/", express.static(path.join(__dirname, "nikkei225reactapp")));
 
-cron.schedule("5 45 15 * * 1-5", _ => {
+cron.schedule("5 45 17 * * 1-5", _ => {
   main();
 });
 

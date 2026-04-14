@@ -3,13 +3,13 @@ url：https://cloud.mongodb.com/v2/64dc95f451f876226cddec2d#/clusters/detail/Clu
 # AWSのセキュリティルールのインバウンドルールにCustomTCPポート27017を許可
 
 # mongodbのIP Access ListにAWSインスタンスのIPアドレスを追加
-# https://cloud.mongodb.com/v2/69baa6982714302866467f85#/security/network/accessList
+https://cloud.mongodb.com/v2/69baa6982714302866467f85#/security/network/accessList
 
 ・Use this connection string in your application
-# mongodb+srv://alexandrepereiraassano_db_user:4xuUESAC0Hj4whnh@nikkei225nodejs.y9h2sp6.mongodb.net/
-# mongodb+srv://alexandrepereiraassano_db_user:4xuUESAC0Hj4whnh@nikkei225nodejs.y9h2sp6.mongodb.net/?appName=nikkei225nodejs
+mongodb+srv://alexandrepereiraassano_db_user:4xuUESAC0Hj4whnh@nikkei225nodejs.y9h2sp6.mongodb.net/
+mongodb+srv://alexandrepereiraassano_db_user:4xuUESAC0Hj4whnh@nikkei225nodejs.y9h2sp6.mongodb.net/?appName=nikkei225nodejs
 
-# mongosh "mongodb+srv://nikkei225nodejs.y9h2sp6.mongodb.net/" --apiVersion 1 --username alexandrepereiraassano_db_user
+mongosh "mongodb+srv://nikkei225nodejs.y9h2sp6.mongodb.net/" --apiVersion 1 --username alexandrepereiraassano_db_user
 
 ・username:alexandrepereiraassano_db_user
 ・password:4xuUESAC0Hj4whnh
